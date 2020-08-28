@@ -61,12 +61,19 @@ router.get('/:id', validateSession, (req, res) => {
 /* ***********************************
  *** Update Log  ***
 *********************************** */
-
+// Not updating
 router.put('/:id', validateSession, (req, res) => {
 
-    const query = {where: {id: req.params.id}};
+    const updateLogEntry = {
+        description:  req.body.log.description,
+        definition:   req.body.log.definition,
+        result:  req.body.log.result
+    };
 
-    Log.update(req.body, query)
+    const query = {where: {id: req.params.id, owner_id: req.user.id}};
+
+    // Log.update(req.body, query)
+    Log.update(updateLogEntry, query)
     .then(recordsChanged => res.status(200).json({
         message:    `${recordsChanged} log entry was updated.`
     }))
@@ -97,7 +104,6 @@ router.delete('/:id', validateSession, (req, res) => {
             })
     .catch(err => res.status(500).json({error: err}))
 });
-
 
 
 module.exports = router;
