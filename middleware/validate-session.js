@@ -6,16 +6,14 @@ const validateSession = (req, res, next) => {
     // console.log('token --> ', token);
 
     if (!token) {
-        return res.status(403).send({ auth: false, message: 'No token provided.'});
+        return res.status(403).send({auth: false, message: 'No token provided.'});
     } else {
         jwt.verify(token, process.env.JWT_SECRET, (err, decodeToken) => {
             // console.log('decodeToken --> ', decodeToken);
 
             if (!err && decodeToken) {
                 User.findOne({
-                    where: {
-                        id: decodeToken.id
-                    }
+                    where: {id: decodeToken.id}
                 })
                 .then(user => {
                     // console.log('user --> ', user);
