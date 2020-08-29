@@ -61,19 +61,11 @@ router.get('/:id', validateSession, (req, res) => {
 /* ***********************************
  *** Update Log  ***
 *********************************** */
-// Not updating
 router.put('/:id', validateSession, (req, res) => {
-
-    const updateLogEntry = {
-        description:  req.body.log.description,
-        definition:   req.body.log.definition,
-        result:  req.body.log.result
-    };
 
     const query = {where: {id: req.params.id, owner_id: req.user.id}};
 
-    // Log.update(req.body, query)
-    Log.update(updateLogEntry, query)
+    Log.update(req.body.log, query)
     .then(recordsChanged => res.status(200).json({
         message:    `${recordsChanged} log entry was updated.`
     }))
